@@ -1,14 +1,7 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from "http";
 import config from "./config";
-import addRoutes, { routes } from "./helpers/route-handler";
-import sendJSON from "./helpers/send-json";
-
-addRoutes("GET", "/", (req, res) => {
-  sendJSON(res, 200, {
-    message: "Hello form node js with type script...",
-    path: req.url,
-  });
-});
+import { routes } from "./helpers/route-handler";
+import "./routes";
 
 const server: Server = createServer(
   (req: IncomingMessage, res: ServerResponse) => {
@@ -28,45 +21,6 @@ const server: Server = createServer(
           message: "Route not found!!!",
         })
       );
-    }
-
-    // root route
-    // if (req.url === "/" && req.method === "GET") {
-    //   res.writeHead(200, { "content-type": "application/json" });
-    //   res.end(
-    //     JSON.stringify({
-    //       message: "Hello form node js with type script...",
-    //       path: req.url,
-    //     })
-    //   );
-    // }
-
-    if (req.url === "/api" && req.method === "GET") {
-      res.writeHead(200, { "content-type": "application/json" });
-      res.end(
-        JSON.stringify({
-          message: "Health status is okay.",
-          path: req.url,
-        })
-      );
-    }
-
-    if (req.url === "/api/users" && req.method === "POST") {
-      let body = "";
-
-      // listen for data chunk
-      req.on("data", (chunk) => {
-        body += chunk.toString();
-      });
-
-      req.on("end", () => {
-        try {
-          const data = JSON.parse(JSON.stringify(body));
-          res.end(data);
-        } catch (error: any) {
-          console.error(error?.message);
-        }
-      });
     }
   }
 );
